@@ -1,0 +1,121 @@
+---
+import { supabase } from '../../lib/supabase';
+
+interface Props {
+	id: string;
+}
+const { id } = Astro.props;
+if (isNaN(Number(id))) throw new Error("ID no válido");
+const {data, error} = await supabase.from('Biciclo').select('NroBiciclo,CodigoCuadro,CUPI,Marca,Modelo,Color,Tipo,Observacion').eq('NroBiciclo', Number(id))
+if (error) throw error
+---
+<div class="bg-white dark:bg-gray-700 rounded-lg p-6 max-w-lg w-lg m-0">
+  <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">Editar Biciclo {id}</h2>
+
+  <form
+    action="/api/biciclos/editById"
+    method="post"
+    id="editForm"
+    onsubmit="this.form.submit();this.form.reset();"
+  >
+    <div class="space-y-4">
+      {data?.map((item) => (
+      <div>
+        <input type="hidden" name="id" value={item.NroBiciclo} />
+        <label class="block text-sm font-medium text-gray-100 mb-1" for="codigoCuadro">Código de Cuadro</label>
+        <input
+          type="text"
+          id="codigoCuadro"
+          name="codigoCuadro"
+          value={item.CodigoCuadro}
+          required
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-100 mb-1" for="cupi">CUPI</label>
+        <input
+          type="text"
+          id="cupi"
+          name="cupi"
+          value={item.CUPI}
+          required
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-100 mb-1" for="marca">Marca</label>
+        <input
+          type="text"
+          id="marca"
+          name="marca"
+          value={item.Marca}
+          required
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-100 mb-1" for="modelo">Modelo</label>
+        <input
+          type="text"
+          id="modelo"
+          name="modelo"
+          value={item.Modelo}
+          required
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-100 mb-1" for="color">Color</label>
+        <input
+          type="text"
+          id="color"
+          name="color"
+          value={item.Color}
+          required
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-100 mb-1" for="tipo">Tipo</label>
+        <input
+          type="text"
+          id="tipo"
+          name="tipo"
+          value={item.Tipo}
+            required
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-100 mb-1" for="observacion">Observación</label>
+        <textarea
+          id="observacion"
+          name="observacion"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        >{item.Observacion}</textarea>
+      </div>
+      <div class="flex justify-end space-x-3 mt-4">
+        <button
+          type="button"
+          onclick="this.form.reset();this.closest('dialog').close();"
+          class="px-4 py-2 border border-gray-300 rounded-md text-gray-100 hover:bg-gray-50"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+        >
+          Guardar
+        </button>
+      </div>
+      ))}
+    </div>
+  </form>
+</div>

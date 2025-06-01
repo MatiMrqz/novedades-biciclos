@@ -1,11 +1,34 @@
 ---
 import Crud from '../components/Crud.astro';
+import Modal from '../components/Modal.astro';
+import Layout from '../layouts/Layout.astro';
+import NewBicicloForm from '../components/biciclo/NewBicicloForm.astro';
+import DeleteBicicloForm from '../components/biciclo/DeleteBicicloForm.astro';
+import { supabase } from '../lib/supabase';
+import EditBicicloForm from '../components/biciclo/EditBicicloForm.astro';
+const {data} = await supabase.from('Biciclo').select('*')
 ---
-	 <Crud
-	title="Novedades"
-	 items={[{title: 'Novedad 1'}, {title: 'Novedad 2'}]}
-	 renderItem={(item) => item.title}
-	 onAdd={() => console.log('Add')}
-	 onEdit={(item) => console.log('Edit', item)}
-	 onDelete={(item) => console.log('Delete', item)}
-	/>
+<Layout title="Biciclos">
+	<Crud
+ title="Biciclos"
+	items={data}
+	renderItem={(item) => `${item.NroBiciclo} - ${item.CodigoCuadro}`}
+	onAdd="newBiciModal"
+	onEdit={(item) => `editModal${item.NroBiciclo}`}
+	onDelete={(item) => `delModal${item.NroBiciclo}`}
+ />
+ <Modal id="newBiciModal">
+	 <NewBicicloForm slot="main" />
+ </Modal>
+{
+ data?.map((item) => (
+	 <Modal id={`delModal${item.NroBiciclo}`}>
+		 <DeleteBicicloForm slot="main" id={item.NroBiciclo} />
+	 </Modal>
+	 <Modal id={`editModal${item.NroBiciclo}`}>
+		 <EditBicicloForm slot="main" id={item.NroBiciclo} />
+	 </Modal>
+ ))
+}
+
+</Layout>
