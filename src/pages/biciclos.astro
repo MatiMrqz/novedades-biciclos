@@ -1,0 +1,11 @@
+---
+import Crud from '../components/Crud.astro';
+---
+	 <Crud
+	title="Novedades"
+	 items={[{title: 'Novedad 1'}, {title: 'Novedad 2'}]}
+	 renderItem={(item) => item.title}
+	 onAdd={() => console.log('Add')}
+	 onEdit={(item) => console.log('Edit', item)}
+	 onDelete={(item) => console.log('Delete', item)}
+	/>

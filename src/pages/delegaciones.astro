@@ -1,0 +1,34 @@
+---
+import { supabase } from "../lib/supabase";
+import Crud from '../components/Crud.astro';
+import Modal from '../components/Modal.astro';
+import Layout from "../layouts/Layout.astro"
+import NewForm from '../components/delegaciones/NewForm.astro'
+import DelForm from '../components/delegaciones/DelForm.astro'
+import EditForm from "../components/delegaciones/EditForm.astro";
+const {data} = await supabase.from('Delegacion').select('*')
+---
+<Layout title="Delegaciones">
+	 <Crud
+	title="Delegaciones"
+	 items={data}
+	 renderItem={(item) => item.Nombre}
+	 onAdd="newDelModal"
+	 onEdit={(item) => `editModal${item.NroDelegacion}`}
+	 onDelete={(item) => `delModal${item.NroDelegacion}`}
+	/>
+	<Modal id="newDelModal">
+		<NewForm slot="main" />
+	</Modal>
+{
+	data?.map((item) => (
+		<Modal id={`delModal${item.NroDelegacion}`}>
+			<DelForm slot="main" id={item.NroDelegacion} />
+		</Modal>
+		<Modal id={`editModal${item.NroDelegacion}`}>
+			<EditForm slot="main" id={item.NroDelegacion} />
+		</Modal>
+	))
+}
+
+</Layout>
