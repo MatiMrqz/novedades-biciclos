@@ -1,0 +1,33 @@
+---
+import { supabase } from "../../lib/supabase";
+import Crud from "../Crud.astro";
+import Modal from "../Modal.astro";
+import NewAsociacionForm from "../asociacion/NewAsociacionForm.astro";
+import DelAsociacion from "./delAsociacion.astro";
+const { idDelegacion, NombreDelegacion } = Astro.props;
+const { data, error } = (await supabase
+  .from("Pertenece")
+  .select(
+    "Biciclo(NroBiciclo,CodigoCuadro),Oficial(ID_Persona,NroLegajo,Rango,Persona(Nombre,Apellido)),Delegacion(NroDelegacion,Nombre)"
+  )
+  .eq("Delegacion", idDelegacion)) as { data: any[]; error: any };
+if (error) throw error;
+---
+<Crud
+  title={NombreDelegacion}
+  items={data}
+  renderItem={(item) =>
+    `Oficial ${item.Oficial.Rango} ${item.Oficial.Persona.Nombre} - Biciclo:${item.Biciclo.CodigoCuadro}`}
+  onAdd={`newAsociacionModal${idDelegacion}`}
+  onDelete={(item) => `delModal${item.Biciclo.NroBiciclo}`}
+/>
+<Modal id={`newAsociacionModal${idDelegacion}`}>
+	<NewAsociacionForm slot="main" idDelegacion={idDelegacion} />
+</Modal>
+{
+  data?.map((item) => (
+    <Modal id={`delModal${item.Biciclo.NroBiciclo}`}>
+      <DelAsociacion slot="main" idBiciclo={item.Biciclo.NroBiciclo} idDelegacion={item.Delegacion.NroDelegacion} idOficial={item.Oficial.ID_Persona} />
+    </Modal>
+  ))
+}

@@ -2,6 +2,7 @@
   "conventionalCommits.scopes": [
     "Delegation",
     "Biciclos",
-    "API"
+    "API",
+    "Oficiales"
   ]
 }

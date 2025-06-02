@@ -1,0 +1,84 @@
+---
+import { supabase } from "../../lib/supabase";
+interface Props {
+  idDelegacion: string;
+}
+const { idDelegacion } = Astro.props;
+const biciclo = await supabase.rpc("biciclos_sin_asignar") as {data: any[], error: any}
+if (biciclo.error) throw biciclo.error;
+const oficial = await supabase.rpc("oficiales_sin_asignar") as {data: any[], error: any}
+if (oficial.error) throw oficial.error;
+---
+
+<div class="bg-white dark:bg-gray-700 rounded-lg p-6 max-w-lg w-lg m-0">
+  <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">
+    Nueva Asociación
+  </h2>
+  <form
+    action="/api/asociacion/create"
+    method="post"
+    id="newForm"
+    onsubmit="this.form.submit();this.form.reset();"
+  >
+    <div class="space-y-4">
+      <input type="hidden" name="idDelegacion" value={idDelegacion} />
+      <div>
+        <label
+          class="block text-sm font-medium text-gray-100 mb-1"
+          for="idBiciclo">Biciclo</label
+        >
+        <select
+          id="idBiciclo"
+          name="idBiciclo"
+          required
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        >
+          <option value="" hidden>Seleccione un biciclo</option>
+          {
+            biciclo.data.map((item) => (
+              <option value={item.NroBiciclo}>{item.CodigoCuadro}</option>
+            ))
+          }
+        </select>
+      </div>
+
+      <div>
+        <label
+          class="block text-sm font-medium text-gray-100 mb-1"
+          for="idOficial">Oficial</label
+        >
+        <select
+          id="idOficial"
+          name="idOficial"
+          required
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        >
+          <option value="" hidden>Seleccione un oficial</option>
+          {
+            oficial.data.map((item) => (
+              <option value={item.ID_Persona}>
+                {item.NroLegajo} - {item.Rango}
+              </option>
+            ))
+          }
+        </select>
+      </div>
+
+      <div class="flex justify-end space-x-3 mt-4">
+        <button
+          type="button"
+          onclick="this.form.reset();this.closest('dialog').close();"
+          class="px-4 py-2 border border-gray-300 rounded-md text-gray-100 hover:bg-gray-50"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
