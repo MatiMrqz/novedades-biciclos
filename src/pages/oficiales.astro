@@ -1,0 +1,35 @@
+---
+import Crud from '../components/Crud.astro';
+import Modal from '../components/Modal.astro';
+import DeleteOficialForm from '../components/oficiales/DeleteOficialForm.astro';
+import EditOficialForm from '../components/oficiales/EditOficialForm.astro';
+import NewOficialForm from '../components/oficiales/NewOficialForm.astro';
+import Layout from '../layouts/Layout.astro';
+import { supabase } from '../lib/supabase';
+const {data, error} = await supabase.from('Oficial').select('ID_Persona, Persona(Nombre,Apellido,Telefono,Email),NroLegajo,Rango,Direccion:ID_Direccion(Calle,Numero,CP,Localidad)') as {data: any[], error: any}
+if (error) throw error
+---
+<Layout title="Oficiales">
+	<Crud
+ title="Oficiales"
+	items={data}
+	renderItem={(item) => `${item.NroLegajo} - ${item.Persona.Nombre} ${item.Persona.Apellido}`}
+	onAdd="newOficialModal"
+	onEdit={(item) => `editModal${item.ID_Persona}`}
+	onDelete={(item) => `delModal${item.ID_Persona}`}
+ />
+ <Modal id="newOficialModal">
+	 <NewOficialForm slot="main" />
+ </Modal>
+{
+ data?.map((item) => (
+	 <Modal id={`delModal${item.ID_Persona}`}>
+		 <DeleteOficialForm slot="main" id={item.ID_Persona} />
+	 </Modal>
+	 <Modal id={`editModal${item.ID_Persona}`}>
+		 <EditOficialForm slot="main" id={item.ID_Persona} />
+	 </Modal>
+ ))
+}
+
+</Layout>

@@ -1,0 +1,37 @@
+---
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+---
+<div class="bg-white dark:bg-gray-700 rounded-lg p-6 max-w-lg w-lg m-0">
+  <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">Baja Oficial {id}</h2>
+
+  <form
+    action="/api/oficial/deleteById"
+    method="post"
+    id="delForm"
+    onsubmit="this.form.submit();this.form.reset();"
+  >
+    <div class="space-y-4">
+      <h3>¿Estás seguro de dar de baja a este oficial?</h3>
+
+      <input type="hidden" name="id" value={id} />
+      <div class="flex justify-end space-x-3 mt-4">
+        <button
+          type="button"
+          onclick="this.form.reset();this.closest('dialog').close();"
+          class="px-4 py-2 border border-gray-300 rounded-md text-gray-100 hover:bg-gray-50"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+        >
+          Dar de Baja
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
