@@ -1,0 +1,78 @@
+<div class="bg-white dark:bg-gray-700 rounded-lg p-6 max-w-lg w-lg m-0">
+  <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">Alta de Novedad</h2>
+
+  <form
+    action="/api/novedad/create"
+    method="post"
+    id="newForm"
+    onsubmit="this.form.submit();this.form.reset();"
+  >
+    <div class="space-y-4">
+      <input type="hidden" id="idBiciclo" name="idBiciclo" />
+      <div>
+        <label class="block text-sm font-medium text-gray-100 mb-1" for="fecha"
+          >Fecha/Hora Novedad</label
+        >
+        <input
+          type="datetime-local"
+          id="fechaHora"
+          name="fechaHora"
+          required
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium text-gray-100 mb-1" for="observacion"
+          >Observacion</label
+        >
+        <textarea
+          id="observacion"
+          name="observacion"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+
+      <div>
+        <input
+          type="checkbox" 
+          id="estadoBiciclo"
+          name="estadoBiciclo"
+          class="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+        <label
+          class="text-sm font-medium text-gray-100 mb-1"
+          for="estadoBiciclo">Fuera de servicio</label
+        >
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-100 mb-1" for="fotografia"
+          >Fotografía (opcional)</label
+        >
+        <input
+          type="file"
+          id="fotografia"
+          name="fotografia"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+
+      <div class="flex justify-end space-x-3 mt-4">
+        <button
+          type="button"
+          onclick="this.form.reset();this.closest('dialog').close();"
+          class="px-4 py-2 border border-gray-300 rounded-md text-gray-100 hover:bg-gray-50"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

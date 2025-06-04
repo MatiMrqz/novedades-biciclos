@@ -1,0 +1,65 @@
+---
+import { supabase } from "../../lib/supabase";
+import Modal from "../Modal.astro";
+import NewNovedad from "./newNovedad.astro";
+
+const { data, error } = (await supabase
+  .from("Pertenece")
+  .select("Biciclo(NroBiciclo,CodigoCuadro)")) as { data: any[]; error: any };
+if (error) throw error;
+let idBiciclo = "";
+---
+
+<script>
+  document.getElementById("biciclo")?.addEventListener("change", (e) => {
+    (document.getElementById("idBiciclo") as HTMLInputElement).value = (
+      e.target as HTMLSelectElement
+    ).value;
+    (document.getElementById("newNovedadButton") as HTMLButtonElement).disabled = false;
+  });
+</script>
+<div class="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
+      Agregar Novedad
+    </h2>
+    <button
+      id="newNovedadButton"
+      onclick="window.newNovedadModal.showModal()"
+      class="bg-blue-500 disabled:bg-gray-400 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition-colors"
+      disabled
+    >
+      Agregar Novedad
+    </button>
+  </div>
+
+  <div class="space-y-4">
+    <div>
+      <label
+        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+        for="biciclo"
+      >
+        Biciclo
+      </label>
+      <select
+        id="biciclo"
+        name="biciclo"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        required
+      >
+        <option value="" hidden>Seleccione un biciclo</option>
+        {
+          data?.map((item) => (
+            <option value={item.Biciclo.NroBiciclo}>
+              {item.Biciclo.CodigoCuadro}
+            </option>
+          ))
+        }
+      </select>
+    </div>
+  </div>
+</div>
+
+<Modal id="newNovedadModal">
+  <NewNovedad slot="main" />
+</Modal>
