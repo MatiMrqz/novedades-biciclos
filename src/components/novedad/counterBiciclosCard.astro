@@ -1,0 +1,25 @@
+---
+import { supabase } from "../../lib/supabase"
+const biciclos = (await supabase.from("Biciclo").select("*",{ count: 'exact', head: true }))
+if (biciclos.error) throw biciclos.error
+const fs = await supabase.rpc("biciclos_fs")
+if (fs.error) throw fs.error
+---
+<div class="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 mb-4">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
+      Biciclos
+    </h2>
+  </div>
+  <div class="flex justify-between">
+    <div class="flex space-x-4 items-center">
+      <span class="text-5xl font-bold">{biciclos.count}</span>
+      <span class="text-gray-500">Biciclos</span>
+    </div>
+    <div class="flex space-x-4 items-center">
+      <span class="text-5xl font-bold">{fs.data}</span>
+      <span class="text-gray-500">Fuera de Servicio</span>
+    </div>
+  </div>
+
+</div>

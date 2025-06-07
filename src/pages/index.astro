@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import NovedadCard from '../components/novedad/novedadCard.astro';
 import { supabase } from "../lib/supabase";
-
+import CounterBiciclosCard from '../components/novedad/counterBiciclosCard.astro';
 const accessToken = Astro.cookies.get("sb-access-token");
 const refreshToken = Astro.cookies.get("sb-refresh-token");
 
@@ -38,5 +38,6 @@ try {
 ---
 <Layout title='Novedades Biciclos'>
 <h1 class="text-2xl font-bold dark:text-white mb-4">Novedades Biciclos</h1>
+<CounterBiciclosCard />
 <NovedadCard />
 </Layout>
